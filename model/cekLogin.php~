@@ -1,0 +1,31 @@
+<?php
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+include_once '../controller/cKoneksi.php';
+if (isset($_POST['submit'])) {
+    $username = $_POST['username'];
+    $password = md5($_POST['password']);
+    $sql = "select idUser, username, password from user where username='$username' and password=left('$password',15)";
+    $select = mysql_query($sql) or die(mysql_error());
+
+    if (mysql_num_rows($select) > 0) {
+        $cekAdmin = mysql_fetch_array($select);
+        if ($cekAdmin['idUser'] == '1') {
+            echo"<script language = 'JavaScript'>alert('Selamat, Login Anda Sukses!!'); document.location = '../dashboardAdmin.php'</script>";
+//            header("location: ../dashboardAdmin.php");
+//pakai include once biar alert jalan
+//            include_once '../dashboardAdmin.php';
+        } else {
+            echo"<script language = 'JavaScript'>alert('Selamat, Login Anda Sukses!!'); document.location = '../dashboardUser.php'</script>";
+//            header("location: ../dashboardUser.php");
+        }
+    } else {
+        echo"<script language = 'JavaScript'>alert('Maaf, Login Anda Gagal!!'); document.location = '../login.php'</script>";
+//        header("location: ../login.php");
+    }
+}
+?>
